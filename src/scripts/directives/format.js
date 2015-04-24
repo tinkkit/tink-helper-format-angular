@@ -13,7 +13,8 @@
       controller:'tinkFormatController',
       scope:{
         minDate:'=?',
-        maxDate:'=?'
+        maxDate:'=?',
+        isDisabled:'='
       },
       require:['tinkFormatInput','ngModel','?^form'],
       template: function() {
