@@ -5,7 +5,7 @@
   } catch (e) {
     module = angular.module('tink.formathelper', []);
   }
-  module.controller('tinkFormatController',function(){
+  module.controller('tinkFormatController',['$scope',function($scope){
 
     var self = this;
     var config;
@@ -56,11 +56,14 @@
         }
       });
       self.element.bind('mousedown', function() {
-        setTimeout(function() {
-          if (placeholder === newVa) {
-            setCursor(0);
-          }
-        }, 1);
+        if($scope.isDisabled !== true){
+          setTimeout(function() {
+            if (placeholder === newVa) {
+              setCursor(0);
+            }
+          }, 1);
+        }
+        return false;
       });
 
       self.element.bind('focus',function(){
@@ -315,7 +318,7 @@ function setCursor(cur) {
   el.focus();
 }
 
-});
+}]);
 })();;'use strict';
 (function(module) {
   try {
