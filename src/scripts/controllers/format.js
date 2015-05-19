@@ -63,7 +63,7 @@
             }
           }, 1);
         }
-        return false;
+        //return false;
       });
 
       self.element.bind('focus',function(){

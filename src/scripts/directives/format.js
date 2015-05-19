@@ -226,6 +226,7 @@
               }
               if(value === config.placeholder){
                 checkValidity(value);
+                ngControl.$setViewValue(null);
               }else{
                 var date = dateCalculator.getDate(value,dateformat);
                 if(date === null){
