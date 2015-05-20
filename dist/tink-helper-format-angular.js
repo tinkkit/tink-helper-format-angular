@@ -63,7 +63,7 @@
             }
           }, 1);
         }
-        return false;
+        //return false;
       });
 
       self.element.bind('focus',function(){
@@ -492,10 +492,11 @@ function setCursor(cur) {
 
           });
         }
-
+        var myWatch = 0;
  //format text going to user (model to view)
         scope.$watch('$parent.'+ attr.ngModel, function(newVal,oldval) {
-          if(!isTouch || isTouch && newVal !== ''){
+          if(myWatch === 0){
+            if(!isTouch || isTouch && newVal !== ''){
               if(newVal != 'Invalid Date' && angular.isDate(newVal)){
                 var date = dateCalculator.format(newVal,dateformat);
                 controller.setValue(date,null,isTouch);
@@ -507,6 +508,9 @@ function setCursor(cur) {
                controller.setValue('',null,isTouch);
             }
             checkValidity(newVal);
+          }else{
+            myWatch = 0;
+          }
         }, true);
 
         controller.init(element,config,form,ngControl);
@@ -547,6 +551,7 @@ function setCursor(cur) {
               }
               if(value === config.placeholder){
                 checkValidity(value);
+                ngControl.$setViewValue(null);
               }else{
                 var date = dateCalculator.getDate(value,dateformat);
                 if(date === null){
@@ -558,7 +563,7 @@ function setCursor(cur) {
                 ngControl.$setDirty();
                 ngControl.$render();
               }
-
+              myWatch = 1;
             });
           });
       }
