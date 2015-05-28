@@ -242,7 +242,11 @@
                 ngControl.$setDirty();
                 ngControl.$render();
               }
-              myWatch = 1;
+              var date = $(elem.html()).contents().contents().unwrap()[0].wholeText;
+                  if(!validFormat(date,dateformat)){
+                    myWatch = 1;
+                    controller.setValue(date);
+                  }
             });
           });
       }

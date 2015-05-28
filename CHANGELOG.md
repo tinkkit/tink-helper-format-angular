@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+## [1.1.1] - 2015-05-28
+
+### Fixed
+- Quick fix for model doesnt becomes empty when wrong format
+
 ## [1.1.0] - 2015-05-20
 
 ### Added
