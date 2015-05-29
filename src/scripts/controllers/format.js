@@ -62,8 +62,9 @@
               setCursor(0);
             }
           }, 1);
+        }else{
+          return false;
         }
-        //return false;
       });
 
       self.element.bind('focus',function(){

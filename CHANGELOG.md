@@ -13,6 +13,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Security
 -->
+## [1.1.2] - 2015-05-29
+
+### Fixed
+- Fixed when disabled also the user interaction is disabled.
 
 ## [1.1.1] - 2015-05-28
 
