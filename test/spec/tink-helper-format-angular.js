@@ -4,7 +4,7 @@ describe('tink-helper-format-angular', function() {
   var bodyEl = $('body'), sandboxEl;
   var $compile, $templateCache, scope;
 
-  // beforeEach(module('tink'));
+  beforeEach(module('tink.formathelper'));
 
   beforeEach(inject(function (_$rootScope_, _$compile_, _$templateCache_) {
     scope = _$rootScope_.$new();
@@ -30,14 +30,41 @@ describe('tink-helper-format-angular', function() {
 
   var templates = {
     'default': {
-      scope: {},
-      element: ''
+      scope: {data:null},
+      element: '<div tink-format-input ng-model="data"></div>'
+    },
+    'required': {
+      scope: {data:null},
+      element: '<div tink-format-input required ng-model="data"></div>'
     }
   };
 
 
   describe('default', function() {
     it('should run this basic setup',function(){
+      var element = compileDirective('default');
+      var scope = element.isolateScope();
+      scope.ctrl.setValue('20/01/2010');
+      expect(scope.ctrl.getValue()).toBe('20/01/2010');
+    });
+    it('should have the right html',function(){
+      var element = compileDirective('default');
+      var scope = element.isolateScope();
+      scope.ctrl.setValue('20/01/2010');
+      expect(scope.ctrl.element.html()).toBe('20<span class="placeholder">/</span>01<span class="placeholder">/</span>2010');
+    });
+    it('should be valid without required',function(){
+      var element = compileDirective('default');
+      var scope = element.isolateScope();
+      expect(scope.ctrl.ngControl.$valid).toBe(true);
+      expect(scope.ctrl.ngControl.$invalid).toBe(false);
+    });
+    it('should be invalid with required attribute',function(){
+      var element = compileDirective('required');
+      var scope = element.isolateScope();
+      expect(scope.ctrl.ngControl.$valid).toBe(false);
+      expect(scope.ctrl.ngControl.$invalid).toBe(true);
+      expect(scope.ctrl.ngControl.$error.required).toBe(true);
     });
   });
 

@@ -3,7 +3,7 @@
   try {
     module = angular.module('tink.formathelper');
   } catch (e) {
-    module = angular.module('tink.formathelper', []);
+    module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
   module.controller('tinkFormatController',['$scope',function($scope){
 

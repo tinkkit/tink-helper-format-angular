@@ -3,7 +3,7 @@
   try {
     module = angular.module('tink.formathelper');
   } catch (e) {
-    module = angular.module('tink.formathelper', []);
+    module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
   module.directive('tinkFormatInput', ['dateCalculator', '$window', 'safeApply', function(dateCalculator, $window, safeApply) {
     return {
@@ -11,6 +11,7 @@
       replace: true,
       priority:99,
       controller:'tinkFormatController',
+      controllerAs:'ctrl',
       scope:{
         minDate:'=?',
         maxDate:'=?',

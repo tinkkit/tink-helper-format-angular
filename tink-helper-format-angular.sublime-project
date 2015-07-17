@@ -16,8 +16,7 @@
 			],
 			"folder_exclude_patterns":
 			[
-				"bower_components",
-				"dist",
+
 				"node_modules"
 			],
 			"name": "tink-helper-format-angular",
