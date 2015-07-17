@@ -108,7 +108,7 @@
       return this.substr(0, start) + value.substr(start, stop - start) + this.substr(stop);
     };
 
-    function handleInput(key, cur) {
+    function handleInput(key, cur) { 
       var cursor;
       var selection;
       if (!cur) {
