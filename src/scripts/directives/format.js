@@ -239,7 +239,8 @@
                 }else{
                   checkValidity(date);
                 }
-                ngControl.$setViewValue(value);
+                //fires 2 watches !
+                //ngControl.$setViewValue(value);
                 ngControl.$setDirty();
                 ngControl.$render();
               }
