@@ -13,6 +13,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Security
 -->
+## [1.1.3] - 2015-07-22
+
+### Changed
+- Changed angular to version 1.4.3
+
+### Fixed
+- Fixed firing 2 watches because of viewValue.
+
 ## [1.1.2] - 2015-05-29
 
 ### Fixed

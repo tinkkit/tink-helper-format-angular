@@ -104,7 +104,7 @@
         }
 
         var isRequired = (function(){
-          if(attr.require === 'true'){
+          if(attr.required){
             return true;
           }else{
             return false;
@@ -148,7 +148,7 @@
               ngControl.$setValidity('date',true);
               errorElem.addClass(noErrorClass);
               if(isRequired){
-                ngControl.$setValidity('date-required',true);
+                ngControl.$setValidity('required',true);
                 errorElem.addClass(noErrorClass);
               }
             }else if(stringValue !== config.placeholder && stringValue !== null){
@@ -157,7 +157,7 @@
               ngControl.$setValidity('date-max',true);
               errorElem.removeClass(noErrorClass);
               if(isRequired){
-                ngControl.$setValidity('date-required',true);
+                ngControl.$setValidity('required',true);
               }
             }else{
               ngControl.$setValidity('date',true);
@@ -165,7 +165,7 @@
               ngControl.$setValidity('date-max',true);
               errorElem.addClass(noErrorClass);
               if(isRequired){
-                ngControl.$setValidity('date-required',false);
+                ngControl.$setValidity('required',false);
                 errorElem.removeClass(noErrorClass);
               }
             }
@@ -241,8 +241,8 @@
                 }
                 //fires 2 watches !
                 //ngControl.$setViewValue(value);
-                ngControl.$setDirty();
-                ngControl.$render();
+                //ngControl.$setDirty();
+                //ngControl.$render();
               }
               var date = $(elem.html()).contents().contents().unwrap()[0].wholeText;
                   if(!validFormat(date,dateformat)){

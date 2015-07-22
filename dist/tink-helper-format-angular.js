@@ -3,7 +3,7 @@
   try {
     module = angular.module('tink.formathelper');
   } catch (e) {
-    module = angular.module('tink.formathelper', []);
+    module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
   module.controller('tinkFormatController',['$scope',function($scope){
 
@@ -108,7 +108,7 @@
       return this.substr(0, start) + value.substr(start, stop - start) + this.substr(stop);
     };
 
-    function handleInput(key, cur) {
+    function handleInput(key, cur) { 
       var cursor;
       var selection;
       if (!cur) {
@@ -325,7 +325,7 @@ function setCursor(cur) {
   try {
     module = angular.module('tink.formathelper');
   } catch (e) {
-    module = angular.module('tink.formathelper', []);
+    module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
   module.directive('tinkFormatInput', ['dateCalculator', '$window', 'safeApply', function(dateCalculator, $window, safeApply) {
     return {
@@ -333,6 +333,7 @@ function setCursor(cur) {
       replace: true,
       priority:99,
       controller:'tinkFormatController',
+      controllerAs:'ctrl',
       scope:{
         minDate:'=?',
         maxDate:'=?',
@@ -425,7 +426,7 @@ function setCursor(cur) {
         }
 
         var isRequired = (function(){
-          if(attr.require === 'true'){
+          if(attr.required){
             return true;
           }else{
             return false;
@@ -469,7 +470,7 @@ function setCursor(cur) {
               ngControl.$setValidity('date',true);
               errorElem.addClass(noErrorClass);
               if(isRequired){
-                ngControl.$setValidity('date-required',true);
+                ngControl.$setValidity('required',true);
                 errorElem.addClass(noErrorClass);
               }
             }else if(stringValue !== config.placeholder && stringValue !== null){
@@ -478,7 +479,7 @@ function setCursor(cur) {
               ngControl.$setValidity('date-max',true);
               errorElem.removeClass(noErrorClass);
               if(isRequired){
-                ngControl.$setValidity('date-required',true);
+                ngControl.$setValidity('required',true);
               }
             }else{
               ngControl.$setValidity('date',true);
@@ -486,7 +487,7 @@ function setCursor(cur) {
               ngControl.$setValidity('date-max',true);
               errorElem.addClass(noErrorClass);
               if(isRequired){
-                ngControl.$setValidity('date-required',false);
+                ngControl.$setValidity('required',false);
                 errorElem.removeClass(noErrorClass);
               }
             }
@@ -560,9 +561,10 @@ function setCursor(cur) {
                 }else{
                   checkValidity(date);
                 }
-                ngControl.$setViewValue(value);
-                ngControl.$setDirty();
-                ngControl.$render();
+                //fires 2 watches !
+                //ngControl.$setViewValue(value);
+                //ngControl.$setDirty();
+                //ngControl.$render();
               }
               var date = $(elem.html()).contents().contents().unwrap()[0].wholeText;
                   if(!validFormat(date,dateformat)){
