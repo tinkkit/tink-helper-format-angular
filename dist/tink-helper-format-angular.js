@@ -426,7 +426,7 @@ function setCursor(cur) {
         }
 
         var isRequired = (function(){
-          if(attr.required){
+          if(attr.required || attr.require){
             return true;
           }else{
             return false;
@@ -563,8 +563,8 @@ function setCursor(cur) {
                 }
                 //fires 2 watches !
                 //ngControl.$setViewValue(value);
-                //ngControl.$setDirty();
-                //ngControl.$render();
+                ngControl.$setDirty();
+                ngControl.$render();
               }
               var date = $(elem.html()).contents().contents().unwrap()[0].wholeText;
                   if(!validFormat(date,dateformat)){
