@@ -194,9 +194,9 @@
         }, true);
 
         controller.init(element,config,form,ngControl);
-         
+
          /* ngControl.$formatters.push(function(modelValue) {
-           
+
           });
 */
 
@@ -240,7 +240,7 @@
                   checkValidity(date);
                 }
                 //fires 2 watches !
-                //ngControl.$setViewValue(value);
+                ngControl.$setViewValue(value);
                 ngControl.$setDirty();
                 ngControl.$render();
               }
