@@ -516,9 +516,9 @@ function setCursor(cur) {
         }, true);
 
         controller.init(element,config,form,ngControl);
-         
+
          /* ngControl.$formatters.push(function(modelValue) {
-           
+
           });
 */
 
@@ -562,7 +562,7 @@ function setCursor(cur) {
                   checkValidity(date);
                 }
                 //fires 2 watches !
-                //ngControl.$setViewValue(value);
+                ngControl.$setViewValue(value);
                 ngControl.$setDirty();
                 ngControl.$render();
               }
