@@ -203,7 +203,7 @@
 
 
           //format text from the user (view to model)
-          ngControl.$parsers.unshift(function(value) {
+         /* ngControl.$parsers.unshift(function(value) {
 
               if(isTouch && value === ''){
                 value = element.val();
@@ -217,8 +217,17 @@
             }else{
               return null;
             }
-          });
+          });*/
           element.unbind('input').unbind('change');
+
+           function addTime(date1,date2){
+               if(angular.isDate(date1) && angular.isDate(date2)){
+                 date1.setMinutes(date2.getMinutes());
+                 date1.setHours(date2.getHours());
+                 date1.setMilliseconds(date2.getMilliseconds());
+               }
+               return date1;
+            }
 
           //on blur update the model.
           element.on('blur', function() {
@@ -238,6 +247,8 @@
                   checkValidity(value);
                 }else{
                   checkValidity(date);
+                  date = addTime(date,ngControl.$modelValue);
+                  value = date;
                 }
                 //fires 2 watches !
                 ngControl.$setViewValue(value);
