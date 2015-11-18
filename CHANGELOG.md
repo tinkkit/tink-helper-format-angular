@@ -13,6 +13,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Security
 -->
+## [1.1.5] - 2015-11-18
+
+### Fixed
+- Fixed issue with disabling elements and tabindex
+
 ## [1.1.4] - 2015-09-28
 
 ### Fixed

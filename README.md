@@ -1,6 +1,6 @@
 # Tink Angular format helper
 
-v1.1.4
+v1.1.5
 
 ## What is this repository for?
 
