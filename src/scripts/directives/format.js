@@ -24,7 +24,7 @@
         if (isTouch) {
           return '<div><input id="input" class="faux-input" type="date"/><div>';
         } else {
-          return '<div tabindex="-1"><div  id="input" role="textbox" class="faux-input" contenteditable="true">{{placeholder}}</div></div>';
+          return '<div><div  id="input" role="textbox" class="faux-input" contenteditable="true">{{placeholder}}</div></div>';
         }
       },
       compile: function(template) {
@@ -195,15 +195,8 @@
 
         controller.init(element,config,form,ngControl);
 
-         /* ngControl.$formatters.push(function(modelValue) {
-
-          });
-*/
-
-
-
           //format text from the user (view to model)
-         /* ngControl.$parsers.unshift(function(value) {
+          ngControl.$parsers.unshift(function(value) {
 
               if(isTouch && value === ''){
                 value = element.val();
@@ -217,17 +210,14 @@
             }else{
               return null;
             }
-          });*/
+          });
           element.unbind('input').unbind('change');
 
-           function addTime(date1,date2){
-               if(angular.isDate(date1) && angular.isDate(date2)){
-                 date1.setMinutes(date2.getMinutes());
-                 date1.setHours(date2.getHours());
-                 date1.setMilliseconds(date2.getMilliseconds());
-               }
-               return date1;
-            }
+          element.on('cut',function(){
+            safeApply(scope,function(){
+              self.setValue(placeholder);
+            })
+          })
 
           //on blur update the model.
           element.on('blur', function() {
@@ -236,9 +226,12 @@
               if(isTouch){
                 value = element.val();
               }else{
-                value = controller.getValue();
+                var values = $(element).clone().contents().contents().unwrap()[0];
+                if(values){
+                  value = values.wholeText;
+                }
               }
-              if(value === config.placeholder){
+              if(value === config.placeholder || value === undefined){
                 checkValidity(value);
                 ngControl.$setViewValue(null);
               }else{
@@ -247,19 +240,17 @@
                   checkValidity(value);
                 }else{
                   checkValidity(date);
-                  date = addTime(date,ngControl.$modelValue);
-                  value = date;
                 }
                 //fires 2 watches !
                 ngControl.$setViewValue(value);
                 ngControl.$setDirty();
                 ngControl.$render();
               }
-              var date = $(elem.html()).contents().contents().unwrap()[0].wholeText;
-                  if(!validFormat(date,dateformat)){
-                    myWatch = 1;
-                    controller.setValue(date);
-                  }
+                        
+              if(!validFormat(date,dateformat)){
+                myWatch = 1;
+               // controller.setValue(date);
+              }
             });
           });
       }

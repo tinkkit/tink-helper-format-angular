@@ -5,7 +5,7 @@
   } catch (e) {
     module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
-  module.controller('tinkFormatController',['$scope',function($scope){
+  module.controller('tinkFormatController',['$scope','safeApply',function($scope,safeApply){
 
     var self = this;
     var config;
@@ -22,7 +22,7 @@
       self.ngControl = ngControl;
       loadAll();
     };
-
+  
     function loadAll(){
       config = self.config;
       format = config.format;
@@ -30,53 +30,85 @@
       //$scope.placeholder = valueToHtml(placeholder);
       self.setValue(placeholder);
       newVa = placeholder;
+      self.element.bind('drop',function(e){
+        if(!self.isDisabled()){
+          var value = e.originalEvent.dataTransfer.getData('Text');
+          self.setValue(value);
+          self.element.blur();
+        }
+        return false;
+      })
       self.element.bind('keydown', function(event) {
-        keyDowned = self.getValue();
-        if(event.which ===91 || event.which === 92 || event.which === 93){
-          controlKey = 1;
-        }
-        if((event.ctrlKey||event.metaKey) && event.which === 88){
-          setTimeout(function() {
-            self.setValue(placeholder);
-          }, 1);
-          return true;
-        }
-        if (event.which === 8) {
-          handleBackspace();
-          return false;
+        if(!self.isDisabled()){
+          keyDowned = self.getValue();
+          if(event.which ===91 || event.which === 92 || event.which === 93){
+            controlKey = 1;
+          }
+          if((event.ctrlKey||event.metaKey) && event.which === 88){
+            setTimeout(function() {
+              self.setValue(placeholder);
+            }, 1);
+            return true;
+          }
+          if (event.which === 8) {
+            handleBackspace();
+            return false;
 
-        } else if (event.which === 46) {
-          handleDelete();
-          return false;
+          } else if (event.which === 46) {
+            handleDelete();
+            return false;
+          }
+        }else{
+          if((event.ctrlKey||event.metaKey) && event.which === 67){
+            return true;
+          }
+          event.preventDefault();
+          event.stopPropagation();
         }
       });
       self.element.bind('keyup', function(event) {
-        if(event.which ===91 || event.which === 92 || event.which === 93){
-          controlKey = 0;
+        if(!self.isDisabled()){
+          if(event.which ===91 || event.which === 92 || event.which === 93){
+            controlKey = 0;
+          }
         }
       });
-      self.element.bind('mousedown', function() {
-        if($scope.isDisabled !== true){
+
+      self.element.bind('focusin', function(event) {
+        if(self.isDisabled() && self.getValue() !== placeholder){
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      });
+      self.element.bind('mousedown', function(evt) {
+        if(!self.isDisabled()){
           setTimeout(function() {
             if (placeholder === newVa) {
               setCursor(0);
             }
           }, 1);
         }else{
-          return false;
+          if(self.getValue() === placeholder){
+            return false;
+          }
         }
       });
 
       self.element.bind('focus',function(){
         setTimeout(function(){
-          var pos = firstCh();
-          if(pos !== newVa.length){
-            setCursor(firstCh());
-          }
+          if(!self.isDisabled()){
+            var pos = firstCh();
+            if(pos !== newVa.length){
+              setCursor(firstCh());
+            }
+          }          
         },20);
       });
 
+      
+
       self.element.bind('paste', function (e) {
+        if(!self.isDisabled()){
           var cursor = getCaretSelection();
           e.preventDefault();
           var text = (e.originalEvent || e).clipboardData.getData('text/plain');
@@ -86,13 +118,16 @@
             handleInput(text[i],cursor);
             cursor++;
           }
+        }
       });
 
       self.element.keypress(function(event) {
-        if(!controlKey){
-          var key = String.fromCharCode(event.which);
-          handleInput(key);
-          return false;
+        if(!self.isDisabled()){
+          if(!controlKey){
+            var key = String.fromCharCode(event.which);
+            handleInput(key);
+            return false;
+          }
         }
       });
 
@@ -219,8 +254,42 @@
       return html;
   }
 
-  self.setValue = function(value,cur,force) {
+  self.disableElements = function(el) {
+    for (var i = 0; i < el.length; i++) {
+      $(el[i]).attr('disabled', 'disabled');
+      //$(el[i]).attr('tabindex', '-1');
+      self.disableElements($(el[i]).children());
+    }
+  }
 
+  self.enableElements = function(el) {
+    for (var i = 0; i < el.length; i++) {
+      $(el[i]).removeAttr('disabled', 'disabled');
+     // $(el[i]).removeAttr('tabindex', '-1');
+      self.enableElements($(el[i]).children());
+    }
+  }
+
+  self.isDisabled = function(){
+    return $scope.isDisabled;
+  }
+
+
+
+  $scope.$watch(function(){return self.isDisabled();},function(newVal){
+    if(newVal){
+      self.disableElements(self.element);
+      $(self.element).removeAttr('contenteditable');
+    }else{
+      self.enableElements(self.element);
+      $(self.element).attr('contenteditable','true');
+    }
+  });
+
+  self.setValue = function(value,cur,force) {
+    if(!self.element[0]){
+      return;
+    }
     if(!force){
       if(value && value.length !== placeholder.length){
         newVa = placeholder;
@@ -235,6 +304,10 @@
 
     if(self.element[0].nodeName === 'DIV'){
       self.element.html(valueToHtml(newVa));
+      if(self.isDisabled()){
+        self.element.find('span').attr('disabled','disabled');
+        self.element.find('span').unbind('mousedown')
+      }
       self.element.trigger('valueChanged',[newVa]);
     }else{
       self.element.val(newVa);
@@ -320,4 +393,4 @@ function setCursor(cur) {
 }
 
 }]);
-})();
+})()
