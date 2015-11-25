@@ -15,6 +15,7 @@
     var deleteVal = -1;
     var controlKey = 0;
     var keyDowned = '';
+    var prevValue;
     self.init = function(element,config,form,ngControl){
       self.element = element;
       self.config = config;
@@ -27,9 +28,9 @@
       config = self.config;
       format = config.format;
       placeholder = config.placeholder;
-      //$scope.placeholder = valueToHtml(placeholder);
-      self.setValue(placeholder);
+      self.setValue(placeholder,null,null,false);
       newVa = placeholder;
+      prevValue = placeholder;
       self.element.bind('drop',function(e){
         if(!self.isDisabled()){
           var value = e.originalEvent.dataTransfer.getData('Text');
@@ -286,7 +287,9 @@
     }
   });
 
-  self.setValue = function(value,cur,force) {
+ 
+
+  self.setValue = function(value,cur,force,ignore) {
     if(!self.element[0]){
       return;
     }
@@ -308,18 +311,25 @@
         self.element.find('span').attr('disabled','disabled');
         self.element.find('span').unbind('mousedown')
       }
-      self.element.trigger('valueChanged',[newVa]);
+      if(prevValue !== newVa && ignore !== false){
+        self.element.trigger('valueChanged',[newVa]);
+      }
     }else{
       self.element.val(newVa);
     }
     if (cur && cur > -1 && cur <= format.length) {
       setCursor(cur);
     }
+      prevValue = newVa;
   };
 
   self.getValue = function(){
     return newVa;
   };
+
+  self.setCurs = function(){
+    setCursor(0);
+  }
 
   function charIs(char, base) {
     char = char.trim();
@@ -393,4 +403,4 @@ function setCursor(cur) {
 }
 
 }]);
-})()
+})();

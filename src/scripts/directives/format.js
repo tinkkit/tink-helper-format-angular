@@ -15,7 +15,7 @@
       scope:{
         minDate:'=?',
         maxDate:'=?',
-        isDisabled:'='
+        isDisabled:'=?'
       },
       require:['tinkFormatInput','ngModel','?^form'],
       template: function() {
@@ -179,13 +179,13 @@
             if(!isTouch || isTouch && newVal !== ''){
               if(newVal != 'Invalid Date' && angular.isDate(newVal)){
                 var date = dateCalculator.format(newVal,dateformat);
-                controller.setValue(date,null,isTouch);
+                controller.setValue(date,null,isTouch,false);
                 checkValidity(newVal);
               }else{
-                controller.setValue(null,null,isTouch);
+                controller.setValue(null,null,isTouch,false);
               }
             }else{
-               controller.setValue('',null,isTouch);
+               controller.setValue('',null,isTouch,false);
             }
             checkValidity(newVal);
           }else{
@@ -233,7 +233,7 @@
               }
               if(value === config.placeholder || value === undefined){
                 checkValidity(value);
-                ngControl.$setViewValue(null);
+                //ngControl.$setViewValue();
               }else{
                 var date = dateCalculator.getDate(value,dateformat);
                 if(date === null){
@@ -241,10 +241,11 @@
                 }else{
                   checkValidity(date);
                 }
+                controller.setValue(value);
                 //fires 2 watches !
-                ngControl.$setViewValue(value);
-                ngControl.$setDirty();
-                ngControl.$render();
+                //ngControl.$setViewValue(value);
+                //ngControl.$setDirty();
+                //ngControl.$render();
               }
                         
               if(!validFormat(date,dateformat)){
