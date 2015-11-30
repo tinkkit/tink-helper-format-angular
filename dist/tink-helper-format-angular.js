@@ -594,13 +594,13 @@ function setCursor(cur) {
             if(!isTouch || isTouch && newVal !== ''){
               if(newVal != 'Invalid Date' && angular.isDate(newVal)){
                 var date = dateCalculator.format(newVal,dateformat);
-                controller.setValue(date,null,isTouch,true);
+                controller.setValue(date,null,isTouch,false);
                 checkValidity(newVal);
               }else{
-                controller.setValue(null,null,isTouch,true);
+                controller.setValue(null,null,isTouch,false);
               }
             }else{
-               controller.setValue('',null,isTouch,true);
+               controller.setValue('',null,isTouch,false);
             }
             checkValidity(newVal);
           }else{
