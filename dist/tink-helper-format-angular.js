@@ -15,6 +15,7 @@
     var deleteVal = -1;
     var controlKey = 0;
     var keyDowned = '';
+    var prevValue;
     self.init = function(element,config,form,ngControl){
       self.element = element;
       self.config = config;
@@ -27,9 +28,9 @@
       config = self.config;
       format = config.format;
       placeholder = config.placeholder;
-      //$scope.placeholder = valueToHtml(placeholder);
-      self.setValue(placeholder);
+      self.setValue(placeholder,null,null,false);
       newVa = placeholder;
+      prevValue = placeholder;
       self.element.bind('drop',function(e){
         if(!self.isDisabled()){
           var value = e.originalEvent.dataTransfer.getData('Text');
@@ -98,7 +99,7 @@
         setTimeout(function(){
           if(!self.isDisabled()){
             var pos = firstCh();
-            if(pos !== newVa.length){
+            if(pos !== config.placeholder.length){
               setCursor(firstCh());
             }
           }          
@@ -210,20 +211,22 @@
     }
 
     function firstCh(){
-      for(var i=0;i<newVa.length;i++){
-        if(newVa.length === format.length){
-          if(format[i] === '0'){
-            if(newVa[i] >-1 && newVa[i] < 10){
+      if(newVa){
+        for(var i=0;i<newVa.length;i++){
+          if(newVa.length === format.length){
+            if(format[i] === '0'){
+              if(newVa[i] >-1 && newVa[i] < 10){
 
-            }else{
-              return i;
+              }else{
+                return i;
+              }
             }
+          }else{
+            return 0;
           }
-        }else{
-          return 0;
         }
+        return newVa.length;
       }
-      return newVa.length;
     }
 
     function valueToHtml(value) {
@@ -255,18 +258,22 @@
   }
 
   self.disableElements = function(el) {
-    for (var i = 0; i < el.length; i++) {
-      $(el[i]).attr('disabled', 'disabled');
-      //$(el[i]).attr('tabindex', '-1');
-      self.disableElements($(el[i]).children());
+    if(el){
+      for (var i = 0; i < el.length; i++) {
+        $(el[i]).attr('disabled', 'disabled');
+        //$(el[i]).attr('tabindex', '-1');
+        self.disableElements($(el[i]).children());
+      }
     }
   }
 
   self.enableElements = function(el) {
-    for (var i = 0; i < el.length; i++) {
-      $(el[i]).removeAttr('disabled', 'disabled');
-     // $(el[i]).removeAttr('tabindex', '-1');
-      self.enableElements($(el[i]).children());
+    if(el){
+      for (var i = 0; i < el.length; i++) {
+        $(el[i]).removeAttr('disabled', 'disabled');
+       // $(el[i]).removeAttr('tabindex', '-1');
+        self.enableElements($(el[i]).children());
+      }
     }
   }
 
@@ -286,7 +293,9 @@
     }
   });
 
-  self.setValue = function(value,cur,force) {
+ 
+
+  self.setValue = function(value,cur,force,ignore) {
     if(!self.element[0]){
       return;
     }
@@ -308,18 +317,26 @@
         self.element.find('span').attr('disabled','disabled');
         self.element.find('span').unbind('mousedown')
       }
-      self.element.trigger('valueChanged',[newVa]);
+      if(prevValue !== newVa && ignore !== false){
+        self.element.trigger('valueChanged',[newVa]);
+      }
     }else{
       self.element.val(newVa);
+      self.element.trigger('valueChanged',[newVa]);
     }
     if (cur && cur > -1 && cur <= format.length) {
       setCursor(cur);
     }
+      prevValue = newVa;
   };
 
   self.getValue = function(){
     return newVa;
   };
+
+  self.setCurs = function(){
+    setCursor(0);
+  }
 
   function charIs(char, base) {
     char = char.trim();
@@ -385,15 +402,17 @@ function setCursor(cur) {
       i = 9999;
     }
   }
-  range.setStart(chosenChild, cur);
-  range.collapse(true);
-  sel.removeAllRanges();
-  sel.addRange(range);
+  if(chosenChild !== 0){
+    range.setStart(chosenChild, cur);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }  
   el.focus();
 }
 
 }]);
-})();'use strict';
+})();;'use strict';
 (function(module) {
   try {
     module = angular.module('tink.formathelper');
@@ -410,7 +429,7 @@ function setCursor(cur) {
       scope:{
         minDate:'=?',
         maxDate:'=?',
-        isDisabled:'='
+        isDisabled:'=?'
       },
       require:['tinkFormatInput','ngModel','?^form'],
       template: function() {
@@ -445,6 +464,7 @@ function setCursor(cur) {
         var dateformat;
         if(isTouch){
           dateformat = 'yyyy-mm-dd';
+          config.placeholder = 'yyyy-MM-dd';
         }else{
           dateformat = 'dd/mm/yyyy';
         }
@@ -574,13 +594,13 @@ function setCursor(cur) {
             if(!isTouch || isTouch && newVal !== ''){
               if(newVal != 'Invalid Date' && angular.isDate(newVal)){
                 var date = dateCalculator.format(newVal,dateformat);
-                controller.setValue(date,null,isTouch);
+                controller.setValue(date,null,isTouch,false);
                 checkValidity(newVal);
               }else{
-                controller.setValue(null,null,isTouch);
+                controller.setValue(null,null,isTouch,false);
               }
             }else{
-               controller.setValue('',null,isTouch);
+               controller.setValue('',null,isTouch,false);
             }
             checkValidity(newVal);
           }else{
@@ -628,7 +648,7 @@ function setCursor(cur) {
               }
               if(value === config.placeholder || value === undefined){
                 checkValidity(value);
-                ngControl.$setViewValue(null);
+                //ngControl.$setViewValue();
               }else{
                 var date = dateCalculator.getDate(value,dateformat);
                 if(date === null){
@@ -636,10 +656,11 @@ function setCursor(cur) {
                 }else{
                   checkValidity(date);
                 }
+                controller.setValue(value);
                 //fires 2 watches !
-                ngControl.$setViewValue(value);
-                ngControl.$setDirty();
-                ngControl.$render();
+                //ngControl.$setViewValue(value);
+                //ngControl.$setDirty();
+                //ngControl.$render();
               }
                         
               if(!validFormat(date,dateformat)){

@@ -13,6 +13,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Security
 -->
+## [1.1.6] - 2015-11-30
+
+### Fixed
+- Fixed issue with ngModel watch
+
 ## [1.1.5] - 2015-11-18
 
 ### Fixed
