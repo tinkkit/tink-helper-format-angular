@@ -50,6 +50,7 @@
         var dateformat;
         if(isTouch){
           dateformat = 'yyyy-mm-dd';
+          config.placeholder = 'yyyy-MM-dd';
         }else{
           dateformat = 'dd/mm/yyyy';
         }

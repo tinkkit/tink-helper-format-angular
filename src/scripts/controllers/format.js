@@ -99,7 +99,7 @@
         setTimeout(function(){
           if(!self.isDisabled()){
             var pos = firstCh();
-            if(pos !== newVa.length){
+            if(pos !== config.placeholder.length){
               setCursor(firstCh());
             }
           }          
@@ -211,20 +211,22 @@
     }
 
     function firstCh(){
-      for(var i=0;i<newVa.length;i++){
-        if(newVa.length === format.length){
-          if(format[i] === '0'){
-            if(newVa[i] >-1 && newVa[i] < 10){
+      if(newVa){
+        for(var i=0;i<newVa.length;i++){
+          if(newVa.length === format.length){
+            if(format[i] === '0'){
+              if(newVa[i] >-1 && newVa[i] < 10){
 
-            }else{
-              return i;
+              }else{
+                return i;
+              }
             }
+          }else{
+            return 0;
           }
-        }else{
-          return 0;
         }
+        return newVa.length;
       }
-      return newVa.length;
     }
 
     function valueToHtml(value) {
@@ -256,18 +258,22 @@
   }
 
   self.disableElements = function(el) {
-    for (var i = 0; i < el.length; i++) {
-      $(el[i]).attr('disabled', 'disabled');
-      //$(el[i]).attr('tabindex', '-1');
-      self.disableElements($(el[i]).children());
+    if(el){
+      for (var i = 0; i < el.length; i++) {
+        $(el[i]).attr('disabled', 'disabled');
+        //$(el[i]).attr('tabindex', '-1');
+        self.disableElements($(el[i]).children());
+      }
     }
   }
 
   self.enableElements = function(el) {
-    for (var i = 0; i < el.length; i++) {
-      $(el[i]).removeAttr('disabled', 'disabled');
-     // $(el[i]).removeAttr('tabindex', '-1');
-      self.enableElements($(el[i]).children());
+    if(el){
+      for (var i = 0; i < el.length; i++) {
+        $(el[i]).removeAttr('disabled', 'disabled');
+       // $(el[i]).removeAttr('tabindex', '-1');
+        self.enableElements($(el[i]).children());
+      }
     }
   }
 
@@ -316,6 +322,7 @@
       }
     }else{
       self.element.val(newVa);
+      self.element.trigger('valueChanged',[newVa]);
     }
     if (cur && cur > -1 && cur <= format.length) {
       setCursor(cur);
@@ -395,10 +402,12 @@ function setCursor(cur) {
       i = 9999;
     }
   }
-  range.setStart(chosenChild, cur);
-  range.collapse(true);
-  sel.removeAllRanges();
-  sel.addRange(range);
+  if(chosenChild !== 0){
+    range.setStart(chosenChild, cur);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }  
   el.focus();
 }
 
