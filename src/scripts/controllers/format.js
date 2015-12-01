@@ -5,7 +5,7 @@
   } catch (e) {
     module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
-  module.controller('tinkFormatController',['$scope','safeApply',function($scope,safeApply){
+  module.controller('tinkFormatController',['$scope',function($scope){
 
     var self = this;
     var config;
@@ -17,7 +17,7 @@
     var keyDowned = '';
     var prevValue;
     var pressedKeys = [];
-    String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
+    String.prototype.contains = function(it) { return this.indexOf(it) !== -1; };
     self.init = function(element,config,form,ngControl){
       self.element = element;
       self.config = config;
@@ -26,13 +26,13 @@
       loadAll();
     };
 
-    function getFormat(regex){
+    /*function getFormat(regex){
       var ra = new RandExp(new RegExp(regex));
       var gens = [];
       for (var i = 0; i < 10; i++) {
         gens.push(ra.gen());
-      };
-    }
+      }
+    }*/
     
     function loadAll(){
       config = self.config;
@@ -54,7 +54,7 @@
           self.element.blur();
         }
         return false;
-      })
+      });
       self.element.bind('keydown', function(event) {
         if(!self.isDisabled()){
           keyDowned = self.getValue();
@@ -97,7 +97,7 @@
           event.stopPropagation();
         }
       });
-      self.element.bind('mousedown', function(evt) {
+      self.element.bind('mousedown', function() {
         if(!self.isDisabled()){
           setTimeout(function() {
             if (placeholder === newVa) {
@@ -227,22 +227,6 @@
 
     function firstCh(){
       return 0 ;
-      if(newVa){
-        for(var i=0;i<newVa.length;i++){
-          if(newVa.length === format.length){
-            if(format[i] === '0'){
-              if(newVa[i] >-1 && newVa[i] < 10){
-
-              }else{
-                return i;
-              }
-            }
-          }else{
-            return 0;
-          }
-        }
-        return newVa.length;
-      }
     }
 
     function valueToHtml(value) {
@@ -281,7 +265,7 @@
         self.disableElements($(el[i]).children());
       }
     }
-  }
+  };
 
   self.enableElements = function(el) {
     if(el){
@@ -291,11 +275,11 @@
         self.enableElements($(el[i]).children());
       }
     }
-  }
+  };
 
   self.isDisabled = function(){
     return $scope.isDisabled;
-  }
+  };
 
 
 
@@ -331,7 +315,7 @@
       self.element.html(valueToHtml(newVa));
       if(self.isDisabled()){
         self.element.find('span').attr('disabled','disabled');
-        self.element.find('span').unbind('mousedown')
+        self.element.find('span').unbind('mousedown');
       }
       if(prevValue !== newVa && ignore !== false){
         self.element.trigger('valueChanged',[newVa]);
@@ -352,11 +336,7 @@
 
   self.setCurs = function(){
     setCursor(0);
-  }
-
-  function isLetter(str) {
-    return str.length === 1 && str.match(/[a-z]/i);
-  }
+  };
 
   function charIs(char, cur) {
     pressedKeys[cur] = char;

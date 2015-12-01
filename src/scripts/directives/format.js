@@ -175,7 +175,7 @@
         }
         var myWatch = 0;
  //format text going to user (model to view)
-        scope.$watch('$parent.'+ attr.ngModel, function(newVal,oldval) {
+        scope.$watch('$parent.'+ attr.ngModel, function(newVal) {
           if(myWatch === 0){
             if(!isTouch || isTouch && newVal !== ''){
               if(newVal != 'Invalid Date' && angular.isDate(newVal)){
@@ -216,14 +216,15 @@
 
           element.on('cut',function(){
             safeApply(scope,function(){
-              self.setValue(placeholder);
-            })
-          })
+              controller.setValue(config.placeholder);
+            });
+          });
 
           //on blur update the model.
           element.on('blur', function() {
             safeApply(scope,function(){
               var value;
+              var date;
               if(isTouch){
                 value = element.val();
               }else{
@@ -236,7 +237,7 @@
                 checkValidity(value);
                 //ngControl.$setViewValue();
               }else{
-                var date = dateCalculator.getDate(value,dateformat);
+                date = dateCalculator.getDate(value,dateformat);
                 if(date === null){
                   checkValidity(value);
                 }else{

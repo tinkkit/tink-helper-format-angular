@@ -24,6 +24,7 @@
     "angular": false,
     "$": false,
     "jQuery": false,
+    "RandExp": false,
     "Sortable": false
   }
 }
