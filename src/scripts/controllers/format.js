@@ -16,6 +16,8 @@
     var controlKey = 0;
     var keyDowned = '';
     var prevValue;
+    var pressedKeys = [];
+    String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
     self.init = function(element,config,form,ngControl){
       self.element = element;
       self.config = config;
@@ -23,10 +25,24 @@
       self.ngControl = ngControl;
       loadAll();
     };
-  
+
+    function getFormat(regex){
+      var ra = new RandExp(new RegExp(regex));
+      var gens = [];
+      for (var i = 0; i < 10; i++) {
+        gens.push(ra.gen());
+      };
+    }
+    
     function loadAll(){
       config = self.config;
       format = config.format;
+
+      if(format && format.contains('00')){
+        format = format.replace(/0/gi, '[0-9]');
+        format = format.replace(/\//gi, '\/');
+      }
+
       placeholder = config.placeholder;
       self.setValue(placeholder,null,null,false);
       newVa = placeholder;
@@ -103,7 +119,7 @@
               setCursor(firstCh());
             }
           }          
-        },20);
+        },5);
       });
 
       
@@ -155,9 +171,19 @@
         selection = cur.end;
       }
 
-      if (cursor > -1 && cursor < format.length) {
-        if (format[cursor] === '0') {
-          if (charIs(key, '0')) {
+      var ra = new RandExp(new RegExp(format));
+      var placeFormat = ra.gen();
+     
+      if(/^[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(placeFormat[cursor])){
+        cursor += 1;
+        selection+=1;
+      }
+      if(/[A-Z]/.test( placeFormat[cursor])){
+        key = key.toUpperCase();
+      }
+
+      if (cursor > -1 && cursor < placeFormat.length) {
+          if (charIs(key, cursor)) {
             if (cursor !== selection) {
               newVa = newVa.replaceRange(cursor, selection, placeholder);
             }
@@ -166,17 +192,6 @@
           } else {
             newVa = newVa.replaceRange(cursor, selection, placeholder);
           }
-        } else {
-          if (charIs(key, '0')) {
-            handleInput(key, {
-              start: cursor + 1,
-              end: selection + 1
-            });
-            return;
-          } else {
-            cursor += 1;
-          }
-        }
       }
       deleteVal = -1;
       self.setValue(newVa,cursor);
@@ -211,6 +226,7 @@
     }
 
     function firstCh(){
+      return 0 ;
       if(newVa){
         for(var i=0;i<newVa.length;i++){
           if(newVa.length === format.length){
@@ -338,14 +354,20 @@
     setCursor(0);
   }
 
-  function charIs(char, base) {
-    char = char.trim();
-    if (base === '0' && char !== '') {
-      if (char > -1 && char < 10) {
-        return true;
+  function isLetter(str) {
+    return str.length === 1 && str.match(/[a-z]/i);
+  }
+
+  function charIs(char, cur) {
+    pressedKeys[cur] = char;
+    var ra = new RandExp(new RegExp(format));
+    var placeFormat = ra.gen();
+    for(var i =0;i<= format.length;i++){
+      if(pressedKeys[i]){
+        placeFormat = placeFormat.replaceAt(i, pressedKeys[i]);
       }
     }
-    return false;
+    return new RegExp(format).test(placeFormat);
   }
 
   function getCaretSelection() {

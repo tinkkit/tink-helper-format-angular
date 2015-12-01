@@ -1,0 +1,44 @@
+<!doctype html>
+<html ng-app="tink.formathelper">
+<head>
+  <meta charset="utf-8">
+  <title>Tink module</title>
+  <meta name="description" content="">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,minimum-scale=1.0">
+  <!-- bower:css -->
+  <!-- endbower -->
+</head>
+<body>
+
+<div ng-controller="load" class="container">
+  <tink-iban ng-model="da"></tink-iban>
+  <tink-datepicker ng-model="dad"></tink-datepicker>
+</div>
+
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/tink-helper-date-angular/dist/tink-helper-date-angular.js"></script>
+<script src="bower_components/tink-helper-safe-apply-angular/dist/tink-helper-safe-apply-angular.js"></script>
+<!-- endbower -->
+<script src="bower_components/tink-datepicker-angular/tink-datepicker-angular.js"></script>
+
+<script>
+  var app = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply','tink.iban','tink.datepicker']).controller('load',function($scope){
+
+  });
+</script>
+<script src="bower_components/tink-iban/tink-iban-angular.js"></script>
+<script src="scripts/controllers/format.js"></script>
+<script src="scripts/controllers/randexp.js"></script>
+<script src="scripts/directives/format.js"></script>
+
+</body>
+</html>
