@@ -14,6 +14,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+## [1.2.1] - 2015-12-02
+
+### Added
+- Added randexp to Bower
+
+### Fixed
+- Fixed a bug in the 'contenteditable' field (only for Webkit browsers)
+
+
+
 ## [1.2.0] - 2015-12-02
 
 ### Added
