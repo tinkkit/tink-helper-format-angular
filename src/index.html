@@ -12,8 +12,32 @@
 <body>
 
 <div ng-controller="load" class="container">
-  <tink-iban ng-model="da"></tink-iban>
-  <tink-datepicker ng-model="dad"></tink-datepicker>
+
+ <form name="nationalNoForm" novalidate>
+        <div class="row form-group" data-ng-class="{'has-error':(nationalNoForm.nationalNoField.$dirty || nationalNoForm.submitted) && nationalNoForm.nationalNoField.$invalid,'has-success': (nationalNoForm.nationalNoField.$dirty || nationalNoForm.submitted) && nationalNoForm.nationalNoField.$valid}">
+          <div class="col-xs-12">
+            <label for="tink-username-example">National number</label>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="validation">
+              
+              <tink-iban ng-model="da"></tink-iban>
+              <tink-datepicker ng-model="dad"></tink-datepicker>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="messages" data-ng-messages="nationalNoForm.nationalNoField.$error" data-ng-if="(nationalNoForm.nationalNoField.$dirty || nationalNoForm.submitted)" >
+              <div class="text-danger" data-ng-message="required">Fill in your national number.</div>
+              <div class="text-danger" data-ng-message="format">Fill in a valid national number.</div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-12">
+            <button data-ng-click="validateNationalNo()" type="button" class="btn-primary">Validate</button>
+          </div>
+        </div>
+      </form>
 </div>
 
 <!-- bower:js -->
@@ -35,7 +59,6 @@
 
   });
 </script>
-<script src="bower_components/tink-iban/tink-iban-angular.js"></script>
 <script src="bower_components/randexp.js/lib/randexp.js"></script>
 <script src="scripts/controllers/format.js"></script>
 <script src="scripts/directives/format.js"></script>

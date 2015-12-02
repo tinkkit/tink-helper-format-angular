@@ -146,15 +146,29 @@
           }
         }
       });
+        $(function(){
+ 
+   // WebKit contentEditable focus bug workaround:
+   if(/AppleWebKit\/([\d.]+)/.exec(navigator.userAgent)) {
+    var editableFix = $('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
+    $('[contenteditable]').blur(function () {
+        editableFix[0].setSelectionRange(0, 0);
+        editableFix.blur();
+    });
+   }
+  });
 
-      self.element.keypress(function(event) {
+       self.element.bind('blur', function (e) {
+  
+       });
+      self.element.keypress(function(event) {console.log(event)
         if(!self.isDisabled()){
           if(!controlKey){
             var key = String.fromCharCode(event.which);
             handleInput(key);
             return false;
           }
-        }
+        }return false;
       });
 
       if(self.form){
@@ -163,6 +177,7 @@
 
     }
     String.prototype.replaceAt = function(index, character) {
+      if(character)
       return this.substr(0, index) + character + this.substr(index + character.length);
     };
     String.prototype.replaceRange = function(start, stop, value) {
