@@ -5,7 +5,7 @@
   } catch (e) {
     module = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']);
   }
-  module.controller('tinkFormatController',['$scope',function($scope){
+  module.controller('tinkFormatController',['$scope','safeApply',function($scope,safeApply){
 
     var self = this;
     var config;
@@ -91,6 +91,21 @@
         }
       });
 
+
+      self.element.on('cut',function(e){
+        safeApply($scope,function(){
+          var cursor = getCaretSelection();
+          if(cursor){
+            var value = self.getValue();
+            value = value.replaceValue(cursor.start,cursor.end,placeholder.substr(cursor.start,cursor.end-cursor.start));
+            self.setValue(value);
+          }else{
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        });
+      });
+
       self.element.bind('focusin', function(event) {
         if(self.isDisabled() && self.getValue() !== placeholder){
           event.preventDefault();
@@ -98,13 +113,7 @@
         }
       });
       self.element.bind('mousedown', function() {
-        if(!self.isDisabled()){
-          setTimeout(function() {
-            if (placeholder === newVa) {
-              setCursor(0);
-            }
-          }, 1);
-        }else{
+        if(self.isDisabled()){
           if(self.getValue() === placeholder){
             return false;
           }
@@ -159,6 +168,9 @@
     String.prototype.replaceRange = function(start, stop, value) {
       return this.substr(0, start) + value.substr(start, stop - start) + this.substr(stop);
     };
+    String.prototype.replaceValue = function(start, stop, value) {
+      return this.substr(0, start) + value.substr(0, stop - start) + this.substr(stop);
+    };
 
     function handleInput(key, cur) { 
       var cursor;
@@ -200,10 +212,14 @@
     function handleBackspace() {
       var cursor = getCaretSelection();
       if (cursor.start === cursor.end && cursor.start > 0) {
+        delete pressedKeys[cursor.start-1];
         newVa = newVa.replaceAt(cursor.start - 1, placeholder[cursor.start - 1]);
         self.setValue(newVa,cursor.start - 1);
       } else {
         newVa = newVa.replaceRange(cursor.start, cursor.end, placeholder);
+        for(var i=cursor.start;i<=cursor.end;i++){
+          delete pressedKeys[i-1];
+        }
         self.setValue(newVa,cursor.start);
       }
 
@@ -217,6 +233,7 @@
           cursor.start++;
         }
         newVa = newVa.replaceAt(cursor.start, placeholder[cursor.start]);
+        delete pressedKeys[cursor.start];
         self.setValue(newVa,pos);
 
       } else {
@@ -235,7 +252,7 @@
       var plEHtml = '</span>';
       var open = 0;
       for (var i = 0; i < placeholder.length; i++) {
-        if (placeholder[i] === value[i]) {
+        if (placeholder[i] === value[i] && pressedKeys[i] !== placeholder[i]) {
           if (open === 0) {
             html += plHtml + value[i];
             open = 1;
@@ -339,15 +356,14 @@
   };
 
   function charIs(char, cur) {
-    pressedKeys[cur] = char;
     var ra = new RandExp(new RegExp(format));
     var placeFormat = ra.gen();
-    for(var i =0;i<= format.length;i++){
-      if(pressedKeys[i]){
-        placeFormat = placeFormat.replaceAt(i, pressedKeys[i]);
-      }
+    placeFormat = placeFormat.replaceAt(cur, char);
+    var expresion = new RegExp(format).test(placeFormat);
+    if(expresion){
+      pressedKeys[cur] = char;
     }
-    return new RegExp(format).test(placeFormat);
+    return expresion;
   }
 
   function getCaretSelection() {

@@ -214,12 +214,6 @@
           });
           element.unbind('input').unbind('change');
 
-          element.on('cut',function(){
-            safeApply(scope,function(){
-              controller.setValue(config.placeholder);
-            });
-          });
-
           //on blur update the model.
           element.on('blur', function() {
             safeApply(scope,function(){
