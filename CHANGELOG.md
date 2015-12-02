@@ -13,15 +13,27 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 ### Security
 -->
+
+## [1.2.0] - 2015-12-02
+
+### Added
+- Added regex validation
+
+
+
 ## [1.1.6] - 2015-11-30
 
 ### Fixed
 - Fixed issue with ngModel watch
 
+
+
 ## [1.1.5] - 2015-11-18
 
 ### Fixed
 - Fixed issue with disabling elements and tabindex
+
+
 
 ## [1.1.4] - 2015-09-28
 
@@ -33,7 +45,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.1.3] - 2015-07-22
 
 ### Changed
-- Changed angular to version 1.4.3
+- Upgraded angular to version 1.4.3
 
 ### Fixed
 - Fixed firing 2 watches because of viewValue.
@@ -43,14 +55,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.1.2] - 2015-05-29
 
 ### Fixed
-- Fixed when disabled also the user interaction is disabled.
+- Fixed when disabled, also the user interaction is disabled.
 
 
 
 ## [1.1.1] - 2015-05-28
 
 ### Fixed
-- Quick fix for model doesnt becomes empty when wrong format
+- Quick fix for model not becoming empty when a wrong format is inputted
 
 
 
@@ -58,6 +70,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - value stays when wrong format
+
 ### Fixed
 - data model becomes null when delete everything
 

@@ -29,6 +29,8 @@ module.exports = function(config) {
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/tink-helper-date-angular/dist/tink-helper-date-angular.js',
       'bower_components/tink-helper-safe-apply-angular/dist/tink-helper-safe-apply-angular.js',
+      'bower_components/tink-iban-angular/dist/tink-iban-angular.js',
+      'bower_components/randexp.js/lib/randexp.js',
       'src/scripts/{,*/}*.js',
       'src/{,*/}',
       'test/mock/{,*/}*.js',
