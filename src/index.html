@@ -12,32 +12,8 @@
 <body>
 
 <div ng-controller="load" class="container">
-
- <form name="nationalNoForm" novalidate>
-        <div class="row form-group" data-ng-class="{'has-error':(nationalNoForm.nationalNoField.$dirty || nationalNoForm.submitted) && nationalNoForm.nationalNoField.$invalid,'has-success': (nationalNoForm.nationalNoField.$dirty || nationalNoForm.submitted) && nationalNoForm.nationalNoField.$valid}">
-          <div class="col-xs-12">
-            <label for="tink-username-example">National number</label>
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <div class="validation">
-              
-              <tink-iban ng-model="da"></tink-iban>
-              <tink-datepicker ng-model="dad"></tink-datepicker>
-            </div>
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <div class="messages" data-ng-messages="nationalNoForm.nationalNoField.$error" data-ng-if="(nationalNoForm.nationalNoField.$dirty || nationalNoForm.submitted)" >
-              <div class="text-danger" data-ng-message="required">Fill in your national number.</div>
-              <div class="text-danger" data-ng-message="format">Fill in a valid national number.</div>
-            </div>
-          </div>
-        </div>
-        <div class="row form-group">
-          <div class="col-xs-12">
-            <button data-ng-click="validateNationalNo()" type="button" class="btn-primary">Validate</button>
-          </div>
-        </div>
-      </form>
+  <tink-iban ng-model="da"></tink-iban>
+  <tink-datepicker ng-model="dad"></tink-datepicker>
 </div>
 
 <!-- bower:js -->
@@ -49,17 +25,16 @@
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-touch/angular-touch.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/randexp/build/randexp.min.js"></script>
 <script src="bower_components/tink-helper-date-angular/dist/tink-helper-date-angular.js"></script>
 <script src="bower_components/tink-helper-safe-apply-angular/dist/tink-helper-safe-apply-angular.js"></script>
 <!-- endbower -->
-<script src="bower_components/tink-datepicker-angular/tink-datepicker-angular.js"></script>
 
 <script>
-  var app = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply','tink.iban','tink.datepicker']).controller('load',function($scope){
+  var app = angular.module('tink.formathelper', ['tink.datehelper','tink.safeApply']).controller('load',function($scope){
 
   });
 </script>
-<script src="bower_components/randexp.js/lib/randexp.js"></script>
 <script src="scripts/controllers/format.js"></script>
 <script src="scripts/directives/format.js"></script>
 
