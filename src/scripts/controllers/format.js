@@ -33,7 +33,7 @@
         gens.push(ra.gen());
       }
     }*/
-    
+
     function loadAll(){
       config = self.config;
       format = config.format;
@@ -127,11 +127,11 @@
             if(pos !== config.placeholder.length){
               setCursor(firstCh());
             }
-          }          
+          }
         },5);
       });
 
-      
+
 
       self.element.bind('paste', function (e) {
         if(!self.isDisabled()){
@@ -147,7 +147,7 @@
         }
       });
         $(function(){
- 
+
    // WebKit contentEditable focus bug workaround:
    if(/AppleWebKit\/([\d.]+)/.exec(navigator.userAgent)) {
     var editableFix = $('<input style="width:1px;height:1px;border:none;margin:0;padding:0;" tabIndex="-1">').appendTo('html');
@@ -159,9 +159,10 @@
   });
 
        self.element.bind('blur', function (e) {
-  
+
        });
-      self.element.keypress(function(event) {console.log(event)
+      self.element.keypress(function(event) {
+        // console.log(event)
         if(!self.isDisabled()){
           if(!controlKey){
             var key = String.fromCharCode(event.which);
@@ -187,7 +188,7 @@
       return this.substr(0, start) + value.substr(0, stop - start) + this.substr(stop);
     };
 
-    function handleInput(key, cur) { 
+    function handleInput(key, cur) {
       var cursor;
       var selection;
       if (!cur) {
@@ -200,7 +201,7 @@
 
       var ra = new RandExp(new RegExp(format));
       var placeFormat = ra.gen();
-     
+
       if(/^[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(placeFormat[cursor])){
         cursor += 1;
         selection+=1;
@@ -325,7 +326,7 @@
     }
   });
 
- 
+
 
   self.setValue = function(value,cur,force,ignore) {
     if(!self.element[0]){
@@ -440,7 +441,7 @@ function setCursor(cur) {
     range.collapse(true);
     sel.removeAllRanges();
     sel.addRange(range);
-  }  
+  }
   el.focus();
 }
 
