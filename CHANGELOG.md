@@ -14,6 +14,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+## [1.2.3] - 2016-01-04
+
+### Removed
+- Removed console logs
+
+
 ## [1.2.2] - 2015-12-02
 
 ### Removed

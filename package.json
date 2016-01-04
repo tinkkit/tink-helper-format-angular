@@ -1,7 +1,7 @@
 {
   "name": "tink-helper-format-angular",
   "description": "Tink Angular format helper",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "repository": {
     "type": "git",
     "url": "git@github.com:tinkkit/tink-helper-format-angular.git"
