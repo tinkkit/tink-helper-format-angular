@@ -472,7 +472,7 @@ function setCursor(cur) {
         if (isTouch) {
           return '<div><input id="input" class="faux-input" type="date"/><div>';
         } else {
-          return '<div><div  id="input" role="textbox" class="faux-input" contenteditable="true">{{placeholder}}</div></div>';
+          return '<div><div  id="input" role="textbox" class="faux-input" contenteditable="true" data-ng-bind="placeholder"></div></div>';
         }
       },
       compile: function(template) {
@@ -691,7 +691,7 @@ function setCursor(cur) {
                 //ngControl.$setDirty();
                 //ngControl.$render();
               }
-                        
+
               if(!validFormat(date,dateformat)){
                 myWatch = 1;
                // controller.setValue(date);
