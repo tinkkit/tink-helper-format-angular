@@ -14,10 +14,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+## [1.2.4] - 2016-01-15
+
+### Fixed
+- Fixed a console error being triggered only in Internet Explorer
+
+
+
 ## [1.2.3] - 2016-01-04
 
 ### Removed
 - Removed console logs
+
 
 
 ## [1.2.2] - 2015-12-02
