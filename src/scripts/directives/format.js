@@ -47,10 +47,14 @@
           format: '00/00/0000',
           placeholder: 'dd/mm/jjjj'
         };
+        var customFormat = false; // LVG: set customFormat variable true to activate it
         var dateformat;
         if(isTouch){
           dateformat = 'yyyy-mm-dd';
           config.placeholder = 'yyyy-MM-dd';
+        }if(customFormat == true){
+          config.placeholder = '   dd/mm/jjjj'; // LVG: since there's a check between value.length and placeholder.length
+          dateformat = 'ddd dd/mm/yyyy'; // LVG: add customFormat to show date like wo 27/01/2016
         }else{
           dateformat = 'dd/mm/yyyy';
         }
