@@ -621,10 +621,7 @@ function setCursor(cur) {
 
           });
         }
-        var myWatch = 0;
- //format text going to user (model to view)
         scope.$watch('$parent.'+ attr.ngModel, function(newVal) {
-          if(myWatch === 0){
             if(!isTouch || isTouch && newVal !== ''){
               if(newVal != 'Invalid Date' && angular.isDate(newVal)){
                 var date = dateCalculator.format(newVal,dateformat);
@@ -637,9 +634,6 @@ function setCursor(cur) {
                controller.setValue('',null,isTouch,false);
             }
             checkValidity(newVal);
-          }else{
-            myWatch = 0;
-          }
         }, true);
 
         controller.init(element,config,form,ngControl);
@@ -677,7 +671,6 @@ function setCursor(cur) {
               }
               if(value === config.placeholder || value === undefined){
                 checkValidity(value);
-                //ngControl.$setViewValue();
               }else{
                 date = dateCalculator.getDate(value,dateformat);
                 if(date === null){
@@ -686,15 +679,6 @@ function setCursor(cur) {
                   checkValidity(date);
                 }
                 controller.setValue(value);
-                //fires 2 watches !
-                //ngControl.$setViewValue(value);
-                //ngControl.$setDirty();
-                //ngControl.$render();
-              }
-
-              if(!validFormat(date,dateformat)){
-                myWatch = 1;
-               // controller.setValue(date);
               }
             });
           });
